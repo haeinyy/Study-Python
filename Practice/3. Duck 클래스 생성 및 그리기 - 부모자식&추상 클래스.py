@@ -3,13 +3,16 @@ import turtle
 from abc import *
 
 # Duck : super class (부모클래스)
-class Duck:
+class Duck(metaclass=ABCMeta):
     DUCK_SIZE = 30  # class 변수
+    count = 0
 
     def __init__(self):
         self._x = random.randint(-300, 300)  # instance 변수 # protected 접급제어자 -> 자식만 접근가능
         self._y = random.randint(-300, 300)
         self._turtle = turtle
+        Duck.count += 1
+        self._id = Duck.count
 
     # 형태만 있는 추상메서드 정의
     # 자식클래스는 반드시 부모클래스의 추상메서드를 재정의 해야함!
@@ -30,6 +33,10 @@ class Duck:
         self._turtle.goto(self._x + 30, self._y + 50)
         self._turtle.pendown()
         self._turtle.write("꽥꽥")  # print text
+
+    @classmethod
+    def numbering(cls):
+        print('count =', Duck.count)
 
 
 # MallardDuck : sub class (자식클래스)
@@ -57,6 +64,12 @@ class MallardDuck(Duck):
         self._turtle.begin_fill()
         self._turtle.circle(Duck.DUCK_SIZE)
         self._turtle.end_fill()
+        self._turtle.penup()
+        self._turtle.color('black')
+        self._turtle.goto(self._x - 30, self._y - 20)
+        self._turtle.pendown()
+        self._turtle.write(self._id)  # print text
+
 
 class RedDuck(Duck):
     Kind = 'RedDuck'
@@ -74,6 +87,11 @@ class RedDuck(Duck):
         self._turtle.begin_fill()
         self._turtle.circle(Duck.DUCK_SIZE)
         self._turtle.end_fill()
+        self._turtle.penup()
+        self._turtle.color('black')
+        self._turtle.goto(self._x - 30, self._y - 20)
+        self._turtle.pendown()
+        self._turtle.write(self._id)  # print text
 
 class DuckManager:
     def __init__(self):
@@ -89,6 +107,7 @@ class DuckManager:
             duck.display()
             duck.move()
             duck.sound()
+            duck.numbering()
 
 class reset(Duck):
     def display(self):
@@ -96,6 +115,7 @@ class reset(Duck):
 
     def screen_reset(self):
         self._turtle.reset()
+        Duck.count -= 1
 
 # 화면 reset
 d = reset()

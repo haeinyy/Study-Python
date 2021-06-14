@@ -1,3 +1,4 @@
+# 1
 class Person:
     d = '아빠'
 
@@ -22,6 +23,7 @@ person1 = WhatPerson.class_person()
 person2 = WhatPerson.static_person()
 
 
+# 2
 class Person2:
     count = 0
     def __init__(self):
