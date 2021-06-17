@@ -23,17 +23,17 @@ class Duck(metaclass=ABCMeta):
         self._turtle.pendown()
         self._turtle.write("어푸어푸")
 
-class Quack():
+class Quack(metaclass=ABCMeta):
     @abstractmethod
     def quack(self):
         pass
 
-class Fly():
+class Fly(metaclass=ABCMeta):
     @abstractmethod
     def fly(self):
         pass
 
-class MallardDuck(Duck):
+class MallardDuck(Duck, Quack, Fly):
     def __init__(self):
         super(MallardDuck, self).__init__()
         self.__color = 'blue'
@@ -48,9 +48,6 @@ class MallardDuck(Duck):
         self._turtle.circle(Duck.DUCK_SIZE)
         self._turtle.end_fill()
         self._turtle.penup()
-        self.swim()
-        self.quack()
-        self.fly()
 
     def quack(self):
         self._turtle.penup()
@@ -66,7 +63,7 @@ class MallardDuck(Duck):
         self._turtle.pendown()
         self._turtle.write("파닥파닥")
 
-class RedDuck(Duck):
+class RedDuck(Duck, Quack, Fly):
     def __init__(self):
         super(RedDuck, self).__init__()
         self.__color = 'red'
@@ -81,9 +78,6 @@ class RedDuck(Duck):
         self._turtle.circle(Duck.DUCK_SIZE)
         self._turtle.end_fill()
         self._turtle.penup()
-        self.swim()
-        self.quack()
-        self.fly()
 
     def quack(self):
         self._turtle.penup()
@@ -100,7 +94,7 @@ class RedDuck(Duck):
         self._turtle.write("파닥파닥")
 
 
-class RubberDuck(Duck):
+class RubberDuck(Duck, Quack):
     def __init__(self):
         super(RubberDuck, self).__init__()
         self.__color = 'orange'
@@ -115,8 +109,6 @@ class RubberDuck(Duck):
         self._turtle.circle(Duck.DUCK_SIZE)
         self._turtle.end_fill()
         self._turtle.penup()
-        self.swim()
-        self.quack()
 
     def quack(self):
         self._turtle.penup()
@@ -141,8 +133,6 @@ class DecoyDuck(Duck):
         self._turtle.circle(Duck.DUCK_SIZE)
         self._turtle.end_fill()
         self._turtle.penup()
-        self.swim()
-
 
 class DuckManager:
     __duck_list = []
@@ -162,22 +152,52 @@ class DuckManager:
 
     def makeDucks(self, num):
         duck_kind = [MallardDuck,RedDuck,RubberDuck,DecoyDuck]
-        # print(duck_kind[random.randint(0,4)])
 
         for i in range(num):
-            #print(duck_kind[random.randint(0,3)])
             DuckManager.__duck_list.append(duck_kind[random.randint(0,3)]())
 
-    def displayAllDucks(self):
+    def displayAllDuck(self):
+        if DuckManager.__duck_list != None:
+            for duck in DuckManager.__duck_list:
+                if duck != None:
+                    duck.display()
+
+    def quackAllDuck(self):
+        if DuckManager.__duck_list != None:
+            for duck in DuckManager.__duck_list:
+                if duck != None:
+                    if isinstance(duck, Quack):
+                        duck.quack()
+
+    def swimAllDuck(self):
+        if DuckManager.__duck_list != None:
+            for duck in DuckManager.__duck_list:
+                if duck != None:
+                    duck.swim()
+
+    def flyAllDuck(self):
+        if DuckManager.__duck_list != None:
+            for duck in DuckManager.__duck_list:
+                if duck != None:
+                    if isinstance(duck, Fly):
+                        duck.fly()
+
+    def displayAllFuncDucks(self):
         if DuckManager.__duck_list != None:
             for duck in DuckManager.__duck_list:
                 if duck != None: # 반드시 넣어야함!
                     duck.display()
                     duck.swim()
+                if isinstance(duck, Quack):
                     duck.quack()
+                if isinstance(duck, Fly):
                     duck.fly()
 
 if __name__=="__main__":
-    dm = DuckManager().getInstance()
+    dm = DuckManager.getInstance()
     dm.makeDucks(15)
-    dm.displayAllDucks()
+    dm.displayAllFuncDucks()
+    # dm.displayAllDuck()
+    # dm.flyAllDuck()
+    # dm.swimAllDuck()
+    # dm.quackAllDuck()
